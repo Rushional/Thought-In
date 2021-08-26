@@ -26,7 +26,9 @@ public class Entry {
     @GenericGenerator(name="increment", strategy = "increment")
     private long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+//    I set FetchType to eager because otherwise it doesn't work. Don't fully understand why
+//    TODO: Also, should I use ManyToOne here, OneToMany+List there or both???
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 
