@@ -8,6 +8,12 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+// This thing stopped working the moment I deleted persistence.xml, but!
+// It looks like this test should work anyway because I'm not relying on Hibernate directly anymore, Spring FTW.
+// At least, I've managed to run the app and Spring has actually generated the tables.
+// So I'm guessing I'm doing it right and this test has to be remade from scratch
 public class HibernateInitialTest {
 
     @Test
@@ -27,11 +33,14 @@ public class HibernateInitialTest {
 //        I should probably learn to use Hibernate Query Language, but I also need to pace myself
 //        idk why IDEA marks this query as unexpected, the query is correct
         List<User> result = entityManager.createQuery( "from User", User.class ).getResultList();
+//        TODO: actually add stuff to database (then remove it)
+//         or, better yet, only test the connection here, and check the other stuff some other way
+//         so honestly, just learn to test databases and don't invent a bicycle
+        assertEquals(2, result.size());
+        assertEquals("CarrotPerson", result.get(1).getUsername());
         for ( User user : result ) {
             System.out.println( "User (" + user.getUsername() + ")");
         }
-//        TODO: There's no actual asserts, we just made sure the connection is there
-//        but hooray, Hibernate generated all the tables
         entityManager.getTransaction().commit();
         entityManager.close();
     }
